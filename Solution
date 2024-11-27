@@ -1,0 +1,50 @@
+class Solution {
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int[] temp = nums1;
+
+        int l1, r1, l2, r2;
+
+        if (nums1.length > nums2.length) {
+            temp = nums1;
+            nums1 = nums2;
+            nums2 = temp;
+        }
+
+        int total = nums1.length + nums2.length;
+        int low = 0, high = nums1.length;
+        int MedArray1 = (high + low) / 2;
+        int MedArray2 = ((nums1.length + nums2.length + 1) / 2) - MedArray1;
+
+        while (low < high) {
+            l1 = (MedArray1 - 1 < 0) ? Integer.MIN_VALUE : nums1[MedArray1 - 1];
+            r1 = (MedArray1 >= nums1.length) ? Integer.MAX_VALUE : nums1[MedArray1];
+            l2 = (MedArray2 - 1 < 0) ? Integer.MIN_VALUE : nums2[MedArray2 - 1];
+            r2 = (MedArray2 >= nums2.length) ? Integer.MAX_VALUE : nums2[MedArray2];
+
+            if (l1 <= r2 && l2 <= r1) {
+                if (total % 2 == 1) {
+                    return (double) Math.max(l1, l2);
+                } else {
+                    return ((double) Math.max(l1, l2) + (double) Math.min(r1, r2)) / 2;
+                }
+            } else {
+                if (l2 > r1) {
+                    MedArray1++;
+                    MedArray2--;
+                } else if (l1 > r2) {
+                    MedArray1--;
+                    MedArray2++;
+
+                }
+            }
+
+        }
+
+        if (total % 2 == 1) {
+            return (double) nums2[nums2.length / 2];
+        } else {
+            return ((double) nums2[(nums2.length / 2) - 1] + (double) nums2[nums2.length / 2]) / 2;
+        }
+
+    }
+}
